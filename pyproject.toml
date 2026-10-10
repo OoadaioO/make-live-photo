@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "make-live-photo"
-version = "0.1.0"
-description = "将图片和视频合成为 Apple Live Photo，并生成 .pvt 包"
+version = "0.2.0"
+description = "将图片或视频帧与视频合成为 Apple Live Photo，并生成 .pvt 包"
 readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
