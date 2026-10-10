@@ -1,14 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-将指定图片和视频合成为 Live Photo，并生成 .pvt 包。
-用法示例：
-    python make_live_photo.py --image photo.jpg --video video.mov
-    python make_live_photo.py -i photo.heic -v video.mov -o output.pvt
-"""
+"""将指定图片和视频合成为 Live Photo，并生成 .pvt 包。"""
 
 import argparse
+import shutil
 import sys
 from pathlib import Path
 
@@ -17,6 +10,23 @@ try:
 except ImportError:
     print("错误：未找到 makelive 库。请先运行：pip install makelive", file=sys.stderr)
     sys.exit(1)
+
+
+def _move_pvt(src: Path, dest: Path) -> Path:
+    """把生成的 .pvt 目录包移动到指定路径。路径相同时直接返回。"""
+    src = src.expanduser().resolve()
+    dest = dest.expanduser().resolve()
+    if src == dest:
+        return dest
+
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    if dest.exists() or dest.is_symlink():
+        if dest.is_dir() and not dest.is_symlink():
+            shutil.rmtree(dest)
+        else:
+            dest.unlink()
+    shutil.move(src, dest)
+    return dest
 
 
 def main():
@@ -56,7 +66,7 @@ def main():
     if video_path.suffix.lower() != ".mov":
         print("警告：视频建议使用 .mov 格式，否则可能无法被 iOS 识别", file=sys.stderr)
 
-    print(f"正在合成 Live Photo...")
+    print("正在合成 Live Photo...")
     print(f"  图片：{image_path}")
     print(f"  视频：{video_path}")
 
@@ -72,13 +82,13 @@ def main():
 
     pvt_path = Path(pvt_path)
 
-    # 如果用户指定了输出路径，则移动/重命名
+    # .pvt 是目录包，不能用 unlink()。输出路径与生成路径相同时不要删掉刚写好的结果。
     if args.output:
-        output_path = Path(args.output).expanduser().resolve()
-        if output_path.exists():
-            output_path.unlink()
-        pvt_path.rename(output_path)
-        pvt_path = output_path
+        try:
+            pvt_path = _move_pvt(pvt_path, Path(args.output))
+        except OSError as e:
+            print(f"移动输出失败：{e}", file=sys.stderr)
+            sys.exit(1)
 
     print("\n✅ 合成成功！")
     print(f"Asset ID: {asset_id}")

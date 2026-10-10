@@ -18,28 +18,18 @@
 
 ## 安装
 
-本项目依赖 [makelive](https://github.com/RhetTbull/makelive)。
+本项目依赖 [makelive](https://github.com/RhetTbull/makelive)。安装本包时会一并安装它。上游曾提示 `makelive` 在个别环境下用 pip 解析依赖会失败。
 
-> ⚠️ 注意：`makelive` 可能无法直接用 `pip` 安装（依赖冲突），推荐使用 `uv`。
+在克隆下来的仓库目录中安装：
 
 ```bash
-# 方式一：使用 uv 安装（推荐）
-curl -LsSf https://astral.sh/uv/install.sh | sh
-uv install makelive
-
-# 方式二：在项目内安装（需要先安装 uv）
-uv venv
-source .venv/bin/activate
-uv pip install makelive
-
-# 方式三：用 uvx 直接运行，无需安装
-uvx makelive image.jpg video.mov
+pip install .
 ```
 
-安装完成后，确保当前目录能导入 `makelive`：
+也可以不克隆，直接从 Git 安装：
 
 ```bash
-python -c "import makelive; print('makelive OK')"
+pip install git+https://github.com/OoadaioO/make-live-photo.git
 ```
 
 ## 使用
@@ -48,10 +38,13 @@ python -c "import makelive; print('makelive OK')"
 
 ```bash
 # 基本用法
-python make_live_photo.py --image photo.jpg --video video.mov
+make-live-photo --image photo.jpg --video video.mov
 
 # 自定义输出路径（-o 是可选的）
-python make_live_photo.py -i photo.heic -v video.mov -o output.pvt
+make-live-photo -i photo.heic -v video.mov -o output.pvt
+
+# 等价入口
+python -m make_live_photo -i photo.jpg -v clip.mov
 ```
 
 常用选项：
@@ -65,7 +58,7 @@ python make_live_photo.py -i photo.heic -v video.mov -o output.pvt
 ### 快速开始
 
 ```bash
-python make-live-photo.py -i photo.jpg -v clip.mov
+make-live-photo -i photo.jpg -v clip.mov
 ```
 
 ## 参数说明

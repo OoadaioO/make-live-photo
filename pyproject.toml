@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "make-live-photo"
+version = "0.1.0"
+description = "将图片和视频合成为 Apple Live Photo，并生成 .pvt 包"
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "OoadaioO"}]
+keywords = ["live-photo", "pvt", "macos"]
+classifiers = [
+    "Operating System :: MacOS",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: MIT License",
+]
+dependencies = ["makelive>=0.7.0"]
+
+[project.urls]
+Homepage = "https://github.com/OoadaioO/make-live-photo"
+Repository = "https://github.com/OoadaioO/make-live-photo"
+
+[project.scripts]
+make-live-photo = "make_live_photo.cli:main"
+
+[tool.setuptools]
+license-files = ["LICENSE"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
